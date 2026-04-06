@@ -14,9 +14,9 @@ int main(){
         return 1;
     }
 
-//on the basis of filtering out '.' & "..", add folder judgment
+//on the basis of filtering out "." & "..", add folder judgment
     do{
-        if(cFileName == '.' || cFileName == ".."){
+        if(findData.cFileName == "." || findData.cFileName == ".."){
             continue;
         }
 
@@ -31,7 +31,7 @@ int main(){
         5	16	    Directory (Folder)  文件夹
         6	32	    Archive             存档
         */
-        if(!(findData.dwFileAttrbutes & FILE_ATTRIBUTE_DIRECTORY)){
+        if(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY){
             continue;
         }
 
