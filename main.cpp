@@ -10,7 +10,26 @@ int main(int argc, char* argv[]){//argc: number of argument; argv: argument cont
         cout << "usage: ./renamer.exe <prefix>" << endl;
         return 1;
     }
-    string prefix = argv[1];
+
+    bool dryRun = false;
+    string prefix = argv[argc-1];
+
+    for(int i = 1;i < argc;i++){
+        if(string(argv[i]) == "--dry-run"){
+            dryRun = true;
+        }else{
+            prefix = argv[i];
+        }
+    }
+
+    if(prefix.empty()){
+        cout << "please specify the prefix" << endl;
+        return 1;
+    }
+
+    if(dryRun){
+        cout << "[preview] will add prefix: " << prefix << endl;
+    }
 
     WIN32_FIND_DATAA findData;
 
@@ -49,12 +68,21 @@ int main(int argc, char* argv[]){//argc: number of argument; argv: argument cont
         }
 
         string new_name = prefix + filename;
-
         string old_path = ".\\" + filename;
         string new_path = ".\\" + new_name;
-        rename(old_path.c_str(), new_path.c_str());
 
-        cout << filename << "  ->  " << new_name << endl;
+        if(dryRun){
+            //dru run
+            cout << "[preview] " << filename << "  ->  " << new_name << endl;
+        }else{
+            //rename
+            if(rename(old_path.c_str(), new_path.c_str()) == 0){
+                cout << "new_name:  " << new_name << endl;
+            }else{
+                cout << "operation failed" << endl;
+            }
+            
+        }
         
     }while(FindNextFileA(hFind,&findData));
 
